@@ -1,13 +1,20 @@
-const http = require('http');
-const port = 3000;
+const express = require('express')
+const app = express()
+const port = process.env.PORT || 3000
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, world!');
+var LoremIpsum = require('lorem-ipsum').LoremIpsum;
+
+var lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4
+  },
+  wordsPerSentence: {
+    max: 16,
+    min: 4
+  }
 });
 
-server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-});
+app.get('/', (req, res) => res.send(lorem.generateParagraphs(7)))
 
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
